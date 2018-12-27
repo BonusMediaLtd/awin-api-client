@@ -53,11 +53,50 @@ class AwinClient {
      * @param DateTime $endDate   End date
      * @param string   $timezone  Awin timezone format, see http://wiki.awin.com/index.php/API_get_transactions_list
      * @return array Transaction objects. Each part of a transaction is returned as a separate Transaction.
+     * @throws \Exception
      */
     public function getTransactions(DateTime $startDate, DateTime $endDate, $timezone = 'Europe/Paris') {
         $params = [
             'startDate' => $startDate->format('Y-m-d\TH:i:s'),
             'endDate'   => $endDate->format('Y-m-d\TH:i:s'),
+            'timezone'  => $timezone
+        ];
+
+        $query = '?' . http_build_query($params);
+        $response = $this->makeRequest("/publishers/{$this->publisherId}/transactions/", $query);
+
+        $transactions = [];
+        $transactionsData = $response->body;
+
+        if ($transactionsData != null) {
+            foreach ($transactionsData as $transactionData) {
+                $transaction = Transaction::createFromJson($transactionData);
+
+                if ($this->verboseCommissionGroups == true) {
+                    // Search commission groups for this transaction
+                    foreach ($transaction->transactionParts as $transactionPart) {
+                        $transactionPart->commissionGroup = $this->findCommissionGroup($transactionPart->commissionGroupId, $transaction->advertiserId);
+                    }
+                }
+
+                $transactions[] = $transaction;
+            }
+        }
+
+        return $transactions;
+    }
+
+    /**
+     * Get transactions by their IDs.
+     *
+     * @param array $ids
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getTransactionsByIds(array $ids, $timezone = 'Europe/Paris') {
+        $params = [
+            'ids' => implode(',', $ids),
             'timezone'  => $timezone
         ];
 
