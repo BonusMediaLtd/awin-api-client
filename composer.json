@@ -1,5 +1,5 @@
 {
-    "name": "kbeat/awin-api-client",
+    "name": "whitelabeled/awin-api-client",
     "description": "Awin API client",
     "type": "library",
     "require": {
@@ -8,13 +8,13 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Kbeat\\AwinApi\\": "src"
+            "whitelabeled\\AwinApi\\": "src"
         }
     },
     "authors": [
         {
-            "name": "kbeat",
-            "email": "keyzet@gmail.com"
+            "name": "Whitelabeled",
+            "email": "info@whitelabeled.nl"
         }
     ]
 }
