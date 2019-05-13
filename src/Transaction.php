@@ -130,8 +130,10 @@ class Transaction {
         $transaction->declineReason = $transData->declineReason;
         $transaction->clickRefs = (array)$transData->clickRefs;
         $transaction->commissionAmount = $transData->commissionAmount->amount;
+        $transaction->commissionCurrency = $transData->commissionAmount->currency;
         $transaction->orderReference = $transData->orderRef;
         $transaction->saleAmount = $transData->saleAmount->amount;
+        $transaction->saleCurrency = $transData->saleAmount->currency;
         $transaction->siteName = $transData->siteName;
         $transaction->url = $transData->publisherUrl;
         $transaction->paid = $transData->paidToPublisher;
